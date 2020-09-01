@@ -3,11 +3,14 @@ import './App.css';
 import { FormControl, Select, MenuItem, Card, CardContent } from '@material-ui/core';
 import InfoBox from './components/InfoBox';
 import Map from './components/Map';
+import Table from './components/Table';
+import { sortData, prettyPrintStat } from './util'
 
 function App() {
   const [countries, setCountries] = useState([])
   const [country, setCountry] = useState('worldwide')
   const [countryInfo, setCountryInfo] = useState({})
+  const [tableData, setTableData] = useState([])
 
   useEffect(() => {
     const getCountriesData = async () => {
@@ -20,6 +23,10 @@ function App() {
               value: country.countryInfo.iso2
             }
           ))
+
+          const sortedData = sortData(data)
+          setTableData(sortedData)
+
           setCountries(countries)
         })
     }
@@ -47,8 +54,6 @@ function App() {
       })
   }
 
-  console.log(countryInfo)
-
   return (
     <div className="app">
       <div className="app_left">
@@ -66,17 +71,28 @@ function App() {
           </FormControl>
         </div>
         <div className="app__stats">
-          <InfoBox title='Coronavirus Cases' cases={countryInfo.todayCases} total={countryInfo.cases} />
-          <InfoBox title='Recovered' cases={countryInfo.todayRecovered} total={countryInfo.recovered} />
-          <InfoBox title='Deaths' cases={countryInfo.todayDeaths} total={countryInfo.deaths} />
+          <InfoBox
+            title='Coronavirus Cases'
+            cases={prettyPrintStat(countryInfo.todayCases)}
+            total={prettyPrintStat(countryInfo.cases)} />
+          <InfoBox
+            title='Recovered'
+            cases={prettyPrintStat(countryInfo.todayRecovered)}
+            total={prettyPrintStat(countryInfo.recovered)} />
+          <InfoBox
+            title='Deaths'
+            cases={prettyPrintStat(countryInfo.todayDeaths)}
+            total={prettyPrintStat(countryInfo.deaths)} />
         </div>
 
         {/* map */}
         <Map />
       </div>
+
       <Card className="app__right">
         <CardContent>
           <h3>Live Cases by Country</h3>
+          <Table countries={tableData} />
           <h3>Worldwide new cases</h3>
         </CardContent>
       </Card>
