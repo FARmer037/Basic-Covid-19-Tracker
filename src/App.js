@@ -5,12 +5,17 @@ import InfoBox from './components/InfoBox';
 import Map from './components/Map';
 import Table from './components/Table';
 import { sortData, prettyPrintStat } from './util'
+import LineGraph from './components/LineGraph';
+import 'leaflet/dist/leaflet.css'
 
 function App() {
   const [countries, setCountries] = useState([])
   const [country, setCountry] = useState('worldwide')
   const [countryInfo, setCountryInfo] = useState({})
   const [tableData, setTableData] = useState([])
+  const [mapCenter, setMapCenter] = useState({ lat: 13.736717, lng: 100.523186 })
+  const [mapZoom, setMapZoom] = useState(3)
+  const [mapCountries, setMapCountries] = useState([])
 
   useEffect(() => {
     const getCountriesData = async () => {
@@ -26,7 +31,7 @@ function App() {
 
           const sortedData = sortData(data)
           setTableData(sortedData)
-
+          setMapCountries(data)
           setCountries(countries)
         })
     }
@@ -51,6 +56,15 @@ function App() {
       .then(data => {
         setCountry(countryCode)
         setCountryInfo(data)
+
+        // if (countryCode === 'worldwide') {
+        //   setMapCenter({ lat: 13.736717, lng: 100.523186 })
+        //   setMapZoom(3)
+        // }
+        // else {
+        //   setMapCenter([data.countryInfo.lat, data.countryInfo.long])
+        //   setMapZoom(4)
+        // }
       })
   }
 
@@ -86,7 +100,7 @@ function App() {
         </div>
 
         {/* map */}
-        <Map />
+        <Map countries={mapCountries} center={mapCenter} zoom={mapZoom} />
       </div>
 
       <Card className="app__right">
@@ -94,6 +108,7 @@ function App() {
           <h3>Live Cases by Country</h3>
           <Table countries={tableData} />
           <h3>Worldwide new cases</h3>
+          <LineGraph />
         </CardContent>
       </Card>
 
