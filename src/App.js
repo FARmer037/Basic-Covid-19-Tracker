@@ -57,14 +57,15 @@ function App() {
         setCountry(countryCode)
         setCountryInfo(data)
 
-        // if (countryCode === 'worldwide') {
-        //   setMapCenter({ lat: 13.736717, lng: 100.523186 })
-        //   setMapZoom(3)
-        // }
-        // else {
-        //   setMapCenter([data.countryInfo.lat, data.countryInfo.long])
-        //   setMapZoom(4)
-        // }
+        if (countryCode === 'worldwide') {
+          setMapCenter({ lat: 13.736717, lng: 100.523186 })
+          setMapZoom(3)
+        }
+        else {
+          // setMapCenter({ lat: data.countryInfo.lat, lng: data.countryInfo.long })
+          setMapCenter([data.countryInfo.lat, data.countryInfo.long])
+          setMapZoom(4)
+        }
       })
   }
 

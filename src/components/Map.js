@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Map.css'
 import { Map as LeafletMap, TileLayer } from 'react-leaflet'
 import { showDataOnMap } from '../util'
 
 const Map = ({ countries, casesType, center, zoom }) => {
+    const [newCenter, setNewCenter] = useState([])
+
+    useEffect(() => {
+        setNewCenter(center)
+    }, [])
     return (
         <div className='map'>
             <LeafletMap center={center} zoom={zoom}>
