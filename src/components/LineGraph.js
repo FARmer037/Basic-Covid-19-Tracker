@@ -47,7 +47,7 @@ const options = {
     }
 }
 
-const LineGraph = ({ casesType = 'cases' }) => {
+const LineGraph = ({ casesType = 'cases', ...props }) => {
     const [data, setData] = useState({})
 
     const buildChartData = (data, casesType) => {
@@ -73,7 +73,7 @@ const LineGraph = ({ casesType = 'cases' }) => {
                 .then(response => response.json())
                 .then(data => {
                     const chartData = buildChartData(data, casesType)
-                    setData(chartData)
+                    setData(chartData.slice(Math.max(chartData.length - 31, 1)))
                 })
         }
 
@@ -81,7 +81,7 @@ const LineGraph = ({ casesType = 'cases' }) => {
     }, [casesType])
 
     return (
-        <div>
+        <div className={props.className}>
             {data?.length > 0 && (
                 <Line
                     data={{
